@@ -4,4 +4,23 @@ I've followed the instructions precisely as per
 http://opinionated-programmer.com/2011/06/chef-solo-tutorial-managing-a-single-server-with-chef/
 for the initial commit, including the example default.rb recipe file.
 
-I will work this down to a more reasonable base minimum for master, and branch off from there for specific server usages. Any useful recipes will probably be moved into master, but the branching/merging structure is still undecided.
+Usage
+-----
+
+    deploy TARGET COOKBOOK
+
+- TARGET is for ssh, like user@host
+- COOKBOOK is a path to a cookbook directory (containing metadata.* etc) or a tarball thereof.
+
+Requirements
+------------
+
+The target
+- is accessible with ssh.
+- can download from the internet.
+
+What it does
+------------
+
+Bootstraps Chef using one of the methods below, applies the
+default recipe from the cookbook.

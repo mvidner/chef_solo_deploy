@@ -1,0 +1,23 @@
+#!/bin/bash
+set -x
+set -e
+# cookbook dir
+COOKBOOK=$1
+CBNAME=${COOKBOOK##*/}
+
+mkdir -p cookbooks
+mv "$COOKBOOK" cookbooks
+case "$CBNAME" in
+    *.tgz)
+        tar -f cookbooks/$CBNAME -C cookbooks -xv
+        CBNAME=${CBNAME%.tgz}
+esac
+
+SOLO_RB=run-chef-solo/solo.rb
+SOLO_JSON=run-chef-solo/solo.json
+cat >$SOLO_JSON <<EOF
+{
+    "run_list": [ "recipe[$CBNAME::default]" ]
+}
+EOF
+chef-solo -c $SOLO_RB -j $SOLO_JSON

@@ -1,0 +1,32 @@
+#!/bin/bash
+set -x
+set -e
+
+reponame() {
+    release=$(cat /etc/SuSE-release)
+    case "$release" in
+        *openSUSE?11.4*)
+            echo openSUSE_11.4 ;;
+        *openSUSE?12.1*)
+            echo openSUSE_12.1 ;;
+        *"SUSE Linux Enterprise Server"*"VERSION = 11"*"PATCHLEVEL = 1"*)
+            echo SLE_11_SP1 ;;
+        *"SUSE Linux Enterprise Server"*"VERSION = 11"*"PATCHLEVEL = 2"*)
+            echo SLE_11_SP2 ;;
+    esac
+}
+
+addrepo() {
+    zypper addrepo http://download.opensuse.org/repositories/systemsmanagement:/chef/$(reponame) systemsmanagement:chef
+}
+
+install() {
+    zypper --non-interactive install rubygem-chef
+}
+
+rpm -q rubygem-chef && exit
+
+install && exit
+
+addrepo
+install
