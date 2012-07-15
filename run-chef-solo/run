@@ -20,4 +20,4 @@ cat >$SOLO_JSON <<EOF
     "run_list": [ "recipe[$CBNAME::default]" ]
 }
 EOF
-chef-solo -c $SOLO_RB -j $SOLO_JSON
+sudo chef-solo -c $SOLO_RB -j $SOLO_JSON

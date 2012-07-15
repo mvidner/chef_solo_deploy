@@ -2,4 +2,11 @@
 set -x
 set -e
 
-install-chef/opensuse
+if test -f /etc/SUSE-release; then
+    install-chef/opensuse
+elif grep DISTRIB_ID=Ubuntu /etc/*-release; then
+    install-chef/ubuntu
+else
+    echo Unknown distro, fix me.
+    false
+fi

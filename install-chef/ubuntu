@@ -1,0 +1,11 @@
+#!/bin/bash
+set -x
+set -e
+
+install() {
+    sudo apt-get install chef
+}
+
+which chef-solo && exit
+
+install
