@@ -6,6 +6,7 @@
 echo >&2 ".<[bash_env_debug]>."
 # include host name, script name, line number, function name
 # better bash debugging
-PS4='+\h:${BASH_SOURCE}(${FUNCNAME[0]}):${LINENO}: '
+# FUNCNAME dash prevents errors for set -u aka set -o nounset
+PS4='+\h:${BASH_SOURCE}(${FUNCNAME[0]-}):${LINENO}: '
 # enable xtrace
 set -x
