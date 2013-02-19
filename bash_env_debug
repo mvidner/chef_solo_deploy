@@ -1,0 +1,11 @@
+#!/bin/bash
+# Debug bash scripts which call other bash scripts.
+# Usage:
+#   BASH_ENV=.../bash_env_debug ./my-script [args...]
+
+echo >&2 ".<[bash_env_debug]>."
+# include host name, script name, line number, function name
+# better bash debugging
+PS4='+\h:${BASH_SOURCE}(${FUNCNAME[0]}):${LINENO}: '
+# enable xtrace
+set -x

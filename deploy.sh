@@ -9,6 +9,7 @@ shift
 # we remove (-R) the old host key from known_hosts
 ssh-keygen -R "${USER_N_HOST#*@}" 2> /dev/null
 
+# FIXME dead code to pass -x via ssh
 case $SHELLOPTS in
     *xtrace*) ENABLE_XTRACE=':'
 esac
