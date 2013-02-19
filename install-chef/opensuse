@@ -19,7 +19,10 @@ reponame() {
 }
 
 addrepo() {
-    zypper addrepo http://download.opensuse.org/repositories/systemsmanagement:/chef/$(reponame) systemsmanagement:chef
+    REPO=systemsmanagement:chef:master
+    REPOPATH=${REPO//:/:/}  # turn a:b:c into a:/b:/c
+    zypper addrepo http://download.opensuse.org/repositories/${REPOPATH}/$(reponame) ${REPO}
+    zypper --gpg-auto-import-keys refresh ${REPO}
 }
 
 install() {
