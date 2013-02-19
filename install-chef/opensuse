@@ -9,6 +9,8 @@ reponame() {
             echo openSUSE_11.4 ;;
         *openSUSE?12.1*)
             echo openSUSE_12.1 ;;
+        *openSUSE?12.2*)
+            echo openSUSE_12.2 ;;
         *"SUSE Linux Enterprise Server"*"VERSION = 11"*"PATCHLEVEL = 1"*)
             echo SLE_11_SP1 ;;
         *"SUSE Linux Enterprise Server"*"VERSION = 11"*"PATCHLEVEL = 2"*)
@@ -17,7 +19,10 @@ reponame() {
 }
 
 addrepo() {
-    zypper addrepo http://download.opensuse.org/repositories/systemsmanagement:/chef/$(reponame) systemsmanagement:chef
+    REPO=systemsmanagement:chef:master
+    REPOPATH=${REPO//:/:/}  # turn a:b:c into a:/b:/c
+    zypper addrepo http://download.opensuse.org/repositories/${REPOPATH}/$(reponame) ${REPO}
+    zypper --gpg-auto-import-keys refresh ${REPO}
 }
 
 install() {
