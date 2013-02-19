@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
-COOKBOOK=$1
+set -eu
 install-chef/default
-run-chef-solo/run "$COOKBOOK"
+run-chef-solo/run "$@"

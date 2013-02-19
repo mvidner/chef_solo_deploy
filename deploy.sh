@@ -1,9 +1,13 @@
 #!/bin/bash
+# Usage: ./deploy.sh USER@HOST 'files_or dirs...' 'command to run'
 set -e
-# Usage: ./deploy.sh USER@HOST PROGRAM_FILE [DATA_FILES_OR_DIRS...]
 
 USER_N_HOST="${1?}"
-shift
+QUOTED_FILES="$2"
+QUOTED_COMMAND="$3"
+
+# expand the quoted var
+eval set -- $QUOTED_FILES
 
 # The host key might change when we instantiate a new VM, so
 # we remove (-R) the old host key from known_hosts
@@ -21,8 +25,7 @@ WORKDIR=$(mktemp -d /tmp/deploy-XXXX)
 pushd $WORKDIR
 
 tar xvj
-chmod +x '"$1"' # end-squote, substitute-$1-in-outer-script, resume-squote
-./'"${@/#\//}"' # remove leading / like tar does
+'$QUOTED_COMMAND' # end-squote, substitute-$-in-outer-script, resume-squote
 
 popd
 rm -rf $WORKDIR'

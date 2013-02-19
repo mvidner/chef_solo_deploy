@@ -1,23 +1,35 @@
 #!/bin/bash
+# $0 [-r cookbook::recipe] .../cookbook[.tgz]...
 set -x
 set -e
-# cookbook dir
-COOKBOOK=$1
-CBNAME=${COOKBOOK##*/}
+set -u
+
+if [ "$1" = -r ]; then
+    # recipe qualified with cookbook::
+    QRECIPE="$2"
+    shift 2
+fi
 
 mkdir -p cookbooks
-mv "$COOKBOOK" cookbooks
-case "$CBNAME" in
-    *.tgz)
-        tar -f cookbooks/$CBNAME -C cookbooks -xv
-        CBNAME=${CBNAME%.tgz}
-esac
 
+for COOKBOOK; do # in "$@"
+    CBNAME=${COOKBOOK##*/}
+
+    mv "$COOKBOOK" cookbooks
+    case "$CBNAME" in
+        *.tgz)
+            tar -f cookbooks/$CBNAME -C cookbooks -xv
+            CBNAME=${CBNAME%.tgz}
+    esac
+    : ${FIRST_CBNAME=$CBNAME}
+done
+
+: ${QRECIPE=$FIRST_CBNAME::default}
 SOLO_RB=run-chef-solo/solo.rb
 SOLO_JSON=run-chef-solo/solo.json
 cat >$SOLO_JSON <<EOF
 {
-    "run_list": [ "recipe[$CBNAME::default]" ]
+    "run_list": [ "recipe[$QRECIPE]" ]
 }
 EOF
 chef-solo -c $SOLO_RB -j $SOLO_JSON
