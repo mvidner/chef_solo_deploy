@@ -2,7 +2,7 @@
 set -x
 set -e
 
-if test -f /etc/SUSE-release; then
+if test -f /etc/SuSE-release; then
     install-chef/opensuse
 elif grep DISTRIB_ID=Ubuntu /etc/*-release; then
     install-chef/ubuntu
