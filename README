@@ -7,10 +7,11 @@ for the initial commit, including the example default.rb recipe file.
 Usage
 -----
 
-    deploy TARGET COOKBOOK
+    deploy [ -r cookbook::recipe | -j attribs.json] TARGET COOKBOOK...
 
 - TARGET is for ssh, like user@host
 - COOKBOOK is a path to a cookbook directory (containing metadata.* etc) or a tarball thereof.
+
 
 Requirements
 ------------
@@ -24,3 +25,5 @@ What it does
 
 Bootstraps Chef using one of the methods below, applies the
 default recipe from the cookbook.
+
+Only rpm/deb packaged chef is supported in this version.

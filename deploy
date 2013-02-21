@@ -1,6 +1,7 @@
 #!/bin/bash
 # Usage:
 # $0 USER@HOST [-r cookbook::recipe] .../COOKBOOK[.tgz]...
+# $0 USER@HOST -j .../attribs.json   .../COOKBOOK[.tgz]...
 
 set -eu
 TARGET=$1
@@ -12,11 +13,21 @@ if [ "$1" = -r ]; then
     QRECIPE="$2"
     shift 2
 fi
+JSON_ATTRIBS=
+if [ "$1" = -j ]; then
+    # attributes including the run list
+    JSON_ATTRIBS="$2"
+    shift 2
+fi
+
 
 # $@ is cookbooks
 
 printf -v QUOTED_FILES "%q " \
-    install-chef-solo-apply-cookbook.sh install-chef/ run-chef-solo/ "$@"
+    install-chef-solo-apply-cookbook.sh install-chef/ run-chef-solo/ $JSON_ATTRIBS "$@"
 printf -v QUOTED_COMMAND "%q " \
-    sh ./install-chef-solo-apply-cookbook.sh ${QRECIPE:+-r} $QRECIPE "${@/#\//}" # remove leading / like tar does
+    sh ./install-chef-solo-apply-cookbook.sh \
+        ${QRECIPE:+-r} $QRECIPE \
+        ${JSON_ATTRIBS:+-j} ${JSON_ATTRIBS/#\//} \
+        "${@/#\//}" # remove leading / like tar does
 ./deploy.sh "$TARGET" "$QUOTED_FILES" "$QUOTED_COMMAND"
