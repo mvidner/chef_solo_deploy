@@ -3,7 +3,7 @@
 # Usage:
 #   BASH_ENV=.../bash_env_debug ./my-script [args...]
 
-echo >&2 ".<[bash_env_debug]>."
+echo >&2 ".<[BASH_ENV=$BASH_ENV]>."
 # include host name, script name, line number, function name
 # better bash debugging
 # FUNCNAME dash prevents errors for set -u aka set -o nounset

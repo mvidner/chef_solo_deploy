@@ -1,6 +1,5 @@
 #!/bin/bash
 # $0 [-r cookbook::recipe] .../cookbook[.tgz]...
-set -x
 set -e
 set -u
 PROGRAM_DIR="${0%/*}"

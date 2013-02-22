@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 set -e
 
 PROGRAM_DIR="${0%/*}"

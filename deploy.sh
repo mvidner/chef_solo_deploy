@@ -13,13 +13,15 @@ eval set -- $QUOTED_FILES
 # we remove (-R) the old host key from known_hosts
 ssh-keygen -R "${USER_N_HOST#*@}" 2> /dev/null
 
-# FIXME dead code to pass -x via ssh
-case $SHELLOPTS in
-    *xtrace*) ENABLE_XTRACE=':'
-esac
+REMOTE_BASH_ENV_SETUP=
+if [ -n "$BASH_ENV" ]; then
+    # add it to the transferred files
+    set "$@" "$BASH_ENV"
+    REMOTE_BASH_ENV_SETUP="export BASH_ENV=${BASH_ENV/#\//}"
+fi
 
-tar cj "$@" | ssh -o 'StrictHostKeyChecking no' "$USER_N_HOST" '
-set -x
+tar cj "$@" | ssh -o 'StrictHostKeyChecking no' "$USER_N_HOST" \
+${REMOTE_BASH_ENV_SETUP:-}'
 set -e
 WORKDIR=$(mktemp -d /tmp/deploy-XXXX)
 pushd $WORKDIR
