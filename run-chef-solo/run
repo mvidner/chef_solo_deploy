@@ -3,6 +3,7 @@
 set -x
 set -e
 set -u
+PROGRAM_DIR="${0%/*}"
 
 if [ "$1" = -r ]; then
     # recipe qualified with cookbook::
@@ -31,9 +32,9 @@ for COOKBOOK; do # in "$@"
 done
 
 : ${QRECIPE=$FIRST_CBNAME::default}
-SOLO_RB=run-chef-solo/solo.rb
+SOLO_RB="${PROGRAM_DIR}"/solo.rb
 if [ -z "$JSON_ATTRIBS" ]; then
-    JSON_ATTRIBS=run-chef-solo/solo.json
+    JSON_ATTRIBS="${PROGRAM_DIR}"/solo.json
     cat >$JSON_ATTRIBS <<EOF
 {
     "run_list": [ "recipe[$QRECIPE]" ]

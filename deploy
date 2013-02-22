@@ -4,6 +4,8 @@
 # $0 USER@HOST -j .../attribs.json   .../COOKBOOK[.tgz]...
 
 set -eu
+PROGRAM_DIR="${0%/*}"
+
 TARGET=$1
 shift
 
@@ -20,14 +22,13 @@ if [ "$1" = -j ]; then
     shift 2
 fi
 
-
 # $@ is cookbooks
 
 printf -v QUOTED_FILES "%q " \
-    install-chef-solo-apply-cookbook.sh install-chef/ run-chef-solo/ $JSON_ATTRIBS "$@"
+    "${PROGRAM_DIR}"/install-chef-solo-apply-cookbook.sh "${PROGRAM_DIR}"/install-chef/ "${PROGRAM_DIR}"/run-chef-solo/ $JSON_ATTRIBS "$@"
 printf -v QUOTED_COMMAND "%q " \
-    sh ./install-chef-solo-apply-cookbook.sh \
+    sh "${PROGRAM_DIR/#\//}"/install-chef-solo-apply-cookbook.sh \
         ${QRECIPE:+-r} $QRECIPE \
         ${JSON_ATTRIBS:+-j} ${JSON_ATTRIBS/#\//} \
         "${@/#\//}" # remove leading / like tar does
-./deploy.sh "$TARGET" "$QUOTED_FILES" "$QUOTED_COMMAND"
+"${PROGRAM_DIR}"/deploy.sh "$TARGET" "$QUOTED_FILES" "$QUOTED_COMMAND"

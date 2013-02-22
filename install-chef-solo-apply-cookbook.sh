@@ -1,4 +1,5 @@
 #!/bin/bash
 set -eu
-install-chef/default
-run-chef-solo/run "$@"
+PROGRAM_DIR="${0%/*}"
+"${PROGRAM_DIR}"/install-chef/default
+"${PROGRAM_DIR}"/run-chef-solo/run "$@"

@@ -2,10 +2,11 @@
 set -x
 set -e
 
+PROGRAM_DIR="${0%/*}"
 if test -f /etc/SuSE-release; then
-    install-chef/opensuse
+    "${PROGRAM_DIR}"/opensuse
 elif grep DISTRIB_ID=Ubuntu /etc/*-release; then
-    install-chef/ubuntu
+    "${PROGRAM_DIR}"/ubuntu
 else
     echo Unknown distro, fix me.
     false
