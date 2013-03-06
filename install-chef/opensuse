@@ -36,6 +36,19 @@ addrepo() {
     zypper refresh ${REPO}
 }
 
+# $1 obs:repo:name
+addobsvendor() {
+    VENDORBASE=${1%%:*}
+    VENDORID=obs://build.opensuse.org/$VENDORBASE
+    VDIR=/etc/zypp/vendors.d
+    mkdir -p $VDIR
+    test -f $VDIR/$VENDORBASE && return
+    cat <<EOF > $VDIR/$VENDORBASE
+[main]
+vendors = SUSE,$VENDORID
+EOF
+}
+
 install() {
     zypper --non-interactive install rubygem-chef
 }
@@ -45,4 +58,7 @@ rpm -q rubygem-chef && exit
 install && exit
 
 addrepo systemsmanagement:chef:master A0E46E11
+install && exit
+
+addobsvendor systemsmanagement:chef:master
 install
