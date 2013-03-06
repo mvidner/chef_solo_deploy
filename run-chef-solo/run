@@ -2,7 +2,7 @@
 # $0 [-r cookbook::recipe] .../cookbook[.tgz]...
 set -e
 set -u
-PROGRAM_DIR="${0%/*}"
+PROGRAM_DIR=`dirname $0`
 
 if [ "$1" = -r ]; then
     # recipe qualified with cookbook::
