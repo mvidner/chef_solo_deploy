@@ -17,11 +17,23 @@ reponame() {
     esac
 }
 
+# $1 32 bit id
+addrepokey() {
+    rpm -qa gpg-pubkey | grep -i $1 && return
+    gpg --keyserver pgp.mit.edu --recv-keys $1
+    gpg --armor --export $1 | rpm --import /dev/stdin
+}
+
 addrepo() {
-    REPO=systemsmanagement:chef:master
+    REPO=$1
     REPOPATH=${REPO//:/:/}  # turn a:b:c into a:/b:/c
-    zypper addrepo http://download.opensuse.org/repositories/${REPOPATH}/$(reponame) ${REPO}
-    zypper --gpg-auto-import-keys refresh ${REPO}
+    REPOURL=http://download.opensuse.org/repositories/${REPOPATH}/$(reponame)
+    REPOKEY=$2
+
+    zypper repos --export - | grep --fixed-strings $REPOURL && return
+    addrepokey $REPOKEY
+    zypper addrepo $REPOURL ${REPO}
+    zypper refresh ${REPO}
 }
 
 install() {
@@ -32,5 +44,5 @@ rpm -q rubygem-chef && exit
 
 install && exit
 
-addrepo
+addrepo systemsmanagement:chef:master A0E46E11
 install
