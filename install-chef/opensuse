@@ -53,7 +53,7 @@ install() {
     zypper --non-interactive install rubygem-chef
 }
 
-rpm -q rubygem-chef && exit
+rpm -q rubygem-chef >/dev/null && echo "chef is already installed" && exit
 
 install && exit
 
