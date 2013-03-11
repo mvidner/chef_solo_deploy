@@ -21,7 +21,10 @@ reponame() {
 addrepokey() {
     rpm -qa gpg-pubkey | grep -i $1 && return
     gpg --keyserver pgp.mit.edu --recv-keys $1
-    gpg --armor --export $1 | rpm --import /dev/stdin
+    KEYFILE=`mktemp gpg-key-$1-XXXXXX`
+    gpg --armor --export $1 > $KEYFILE
+    rpm --import $KEYFILE
+    rm $KEYFILE
 }
 
 addrepo() {
