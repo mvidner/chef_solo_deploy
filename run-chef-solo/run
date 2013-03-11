@@ -23,7 +23,7 @@ for COOKBOOK; do # in "$@"
 
     mv "$COOKBOOK" cookbooks
     case "$CBNAME" in
-        *.tgz)
+        *.tgz|*.tar.gz)
             tar -f cookbooks/$CBNAME -C cookbooks -xv
             CBNAME=${CBNAME%.tgz}
     esac
